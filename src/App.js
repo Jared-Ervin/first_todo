@@ -1,23 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import Header from "./components/Header";
+import {Todo} from "./components/Todo";
+import {TodoList} from "./components/TodoList";
+import { useState } from "react";
 
 function App() {
+
+  // move state management here
+  const [newTodo, setNewTodo] = useState('')
+  const [todoList, setTodoList] = useState([])
+
+  function handleChange(event){
+      const value = event.target.value
+      setNewTodo(value)
+  }
+
+  function handleSubmit() {
+      setTodoList([newTodo, ...todoList])
+      setNewTodo('')
+      console.log(todoList)
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <Header/>
+     <Todo handleSubmit={handleSubmit} newTodo={newTodo} handleChange={handleChange}/>
+     <span></span>
+     <TodoList todoList={todoList}/>
     </div>
   );
 }
