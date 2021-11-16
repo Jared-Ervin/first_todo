@@ -1,10 +1,16 @@
-import React from "react";
-
 export function TodoList(props) {
   function makeList() {
-    console.log(props);
-    return props.todoList.map((listItem, id) => {
-      return <li onClick={() => props.handleDelete(id)}>{listItem}</li>;
+    return props.todoList.map((listItem, i) => {
+      // console.log(i)
+      return (
+        <div key={i}>
+          <li style={{ display: "inline" }}>{listItem}</li>
+          <button onClick={() => props.handleDelete(i)}>X</button>
+          <button id="myBtn" onClick={() => props.toggleModal(i)}>
+            Edit
+          </button>
+        </div>
+      );
     });
   }
 

@@ -1,24 +1,19 @@
 // Todo - add modal for editing
-
 import Header from "./components/Header";
 import { Todo } from "./components/Todo";
 import { TodoList } from "./components/TodoList";
+import { EditModal } from "./components/EditModal";
 import { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [newTodo, setNewTodo] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [targetTodoId, setTargetTodoId] = useState(-1);
 
-  function handleChange(event) {
-    const value = event.target.value;
-    setNewTodo(value);
-  }
-
-  function handleSubmit() {
+  function handleSubmit(newTodo) {
     if (!newTodo) return;
     setTodoList([newTodo, ...todoList]);
-    setNewTodo("");
-    console.log(todoList);
   }
 
   function handleDelete(idToDelete) {
@@ -29,16 +24,42 @@ function App() {
     );
   }
 
+  function toggleModal(idToEdit) {
+    if (!modalOpen) {
+      console.log(idToEdit);
+      setTargetTodoId(idToEdit);
+    }
+    setModalOpen(!modalOpen);
+  }
+
+  function handleEdit(newTodo, targetId) {
+    setTodoList(
+      todoList.map((element, i) => {
+        if (i === targetId) {
+          return newTodo;
+        }
+        return element;
+      })
+    );
+  }
+
   return (
     <div className="App">
       <Header />
-      <Todo
-        handleSubmit={handleSubmit}
-        newTodo={newTodo}
-        handleChange={handleChange}
+      <EditModal
+        modalOpen={modalOpen}
+        toggleModal={toggleModal}
+        todoList={todoList}
+        targetTodoId={targetTodoId}
+        handleEdit={handleEdit}
       />
+      <Todo handleSubmit={handleSubmit} />
       <span></span>
-      <TodoList todoList={todoList} handleDelete={handleDelete} />
+      <TodoList
+        todoList={todoList}
+        handleDelete={handleDelete}
+        toggleModal={toggleModal}
+      />
     </div>
   );
 }
